@@ -1,12 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Note from './util/note';
-const App = () => {
+import configureStore from './store/store';
 
-};
+// const App = () => {
+//
+// };
 
-window.Note = Note;
+// window.Note = Note;
+
 document.addEventListener("DOMContentLoaded", () => {
+  const store = configureStore();
   const root = document.getElementById("root");
-  ReactDOM.render(<App/>, root);
+  ReactDOM.render(<h1> Synthesizer</h1>, root);
+  window.store = store;
 });
