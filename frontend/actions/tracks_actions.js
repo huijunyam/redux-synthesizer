@@ -4,7 +4,7 @@ export const ADD_NOTES = "ADD_NOTES";
 
 export const startRecording = () => ({
   type: START_RECORDING,
-  timeNow: Date.now()
+  timeStart: Date.now()
 });
 
 export const stopRecording = () => ({
