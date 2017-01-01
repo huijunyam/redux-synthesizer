@@ -7,54 +7,37 @@ import merge from 'lodash/merge';
 
 let currTrackId = 0;
 
-const trackReducer = (state, action) => {
-  Object.freeze(state);
-  switch(action.type) {
+const tracksReducer = (oldState = {}, action) => {
+  Object.freeze(oldState);
+  switch (action.type) {
     case START_RECORDING:
-      return {
+      currTrackId++;
+      return merge({}, oldState, { [currTrackId]: {
         id: currTrackId,
         name: `Track ${currTrackId}`,
         roll: [],
         timeStart: action.timeStart
-      };
+      }});
     case STOP_RECORDING:
-      return merge({}, state, {
+      return merge({}, oldState, { [currTrackId]:
+        merge({}, oldState[currTrackId], {
         roll: [
-          ...state.roll,
-          { notes: [], timeSlice: action.timeNow - state.timeStart }
+          ...oldState[currTrackId].roll,
+          { notes: [], timeSlice: action.timeNow - oldState[currTrackId].timeStart }
         ]
+      })
       });
     case ADD_NOTES:
-      return merge({}, state, {
+      return merge({}, oldState, { [currTrackId]:
+        merge({}, oldState[currTrackId], {
         roll: [
-          ...state.roll,
-          { notes: action.notes, timeSlice: action.timeNow - state.timeStart }
+          ...oldState[currTrackId].roll,
+          { notes: action.notes, timeSlice: action.timeNow - oldState[currTrackId].timeStart }
         ]
+      })
       });
     default:
-      return state;
+      return oldState;
   }
 };
-
-const tracksReducer = (state = {}, action) => {
-  Object.freeze(state);
-  switch(action.type) {
-    case START_RECORDING:
-      currTrackId++; 
-      return merge({}, state, {
-        [currTrackId]: trackReducer(undefined, action)
-      });
-    case STOP_RECORDING:
-      return merge({}, state, {
-        [currTrackId]: trackReducer(state[currTrackId], action)
-      });
-    case ADD_NOTES:
-      return merge({}, state, {
-        [currTrackId]: trackReducer(state[currTrackId], action)
-      });
-    default:
-      return state;
-  }
-};
-
 export default tracksReducer;
