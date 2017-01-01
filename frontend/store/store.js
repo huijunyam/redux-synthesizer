@@ -2,7 +2,9 @@ import { createStore } from 'redux';
 import rootReducer from '../reducers/root_reducer';
 
 const preloadedState = {
-  notes: []
+  notes: [],
+  tracks: {},
+  isRecording: false
 };
 
 const configureStore = (state = preloadedState) => {
